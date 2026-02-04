@@ -51,4 +51,9 @@ class User extends Authenticatable
       'locked_until' => 'datetime',
     ];
   }
+
+  public function role()
+  {
+    return $this->belongsTo(Role::class);
+  }
 }
