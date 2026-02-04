@@ -5,12 +5,14 @@ namespace App\Application\UseCases;
 use DB;
 use App\Domains\Subscription\Services\SubscriptionService;
 use App\Domains\Subscription\Repositories\SubscriptionRepositoryInterface;
+use App\Domains\Subscription\Services\SubscriptionCacheService;
 
 class RenewSubscriptionUseCase
 {
   public function __construct(
     private SubscriptionRepositoryInterface $repo,
-    private SubscriptionService $service
+    private SubscriptionService $service,
+    private SubscriptionCacheService $cacheService
   ) {}
 
   public function execute(int $userId)
@@ -23,6 +25,7 @@ class RenewSubscriptionUseCase
       }
 
       $data = $this->service->renew($sub);
+      $this->cacheService->clear($userId);
 
       return $this->repo->update($sub->id, $data);
     });

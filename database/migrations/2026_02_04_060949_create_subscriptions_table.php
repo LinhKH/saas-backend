@@ -21,6 +21,7 @@ return new class extends Migration
       $table->timestamps();
 
       $table->unique('user_id');
+      $table->index(['user_id', 'status']);
     });
   }
 

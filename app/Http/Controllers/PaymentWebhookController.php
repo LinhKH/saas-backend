@@ -9,7 +9,12 @@ class PaymentWebhookController extends Controller
 {
   public function __invoke(Request $request, HandlePaymentWebhookUseCase $useCase)
   {
-    $useCase->execute($request->all());
-    return response()->json(['status' => 'ok']);
+    try {
+      $useCase->execute($request->all());
+      return response()->json(['status' => 'ok'], 200);
+    } catch (\Throwable $e) {
+      // trả 500 để gateway retry
+      return response()->json(['error' => 'retry'], 500);
+    }
   }
 }

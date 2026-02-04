@@ -18,8 +18,7 @@ class HandlePaymentWebhookUseCase
   public function execute(array $payload): void
   {
     DB::transaction(function () use ($payload) {
-      $payment = $this->repo
-        ->findByIdempotencyKey($payload['idempotency_key']);
+      $payment = $this->repo->findByIdempotencyKey($payload['idempotency_key']);
 
       if (!$payment) {
         return;
@@ -27,7 +26,7 @@ class HandlePaymentWebhookUseCase
 
       // IDMPOTENT: đã success thì bỏ qua
       if ($payment->status === PaymentStatus::SUCCESS) {
-        return;
+        return; // webhook bắn lại 10 lần cũng k sao 👉 Đây là điều Stripe / GMO yêu cầu
       }
 
       if ($payload['status'] === 'success') {

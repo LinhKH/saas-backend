@@ -21,6 +21,7 @@ return new class extends Migration
       $table->string('currency', 10)->default('USD');
       $table->string('idempotency_key')->unique();
       $table->timestamps();
+      $table->index(columns: ['user_id', 'status']);
     });
   }
 

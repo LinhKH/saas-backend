@@ -21,4 +21,9 @@ class SubscriptionEntity
     return $this->status === SubscriptionStatus::ACTIVE
       && $this->expiredAt?->isFuture();
   }
+
+  // Có thể có thêm:
+  // public function renew() { ... }
+  // public function cancel() { ... }
+  // public function upgrade($newPlan) { ... }
 }
