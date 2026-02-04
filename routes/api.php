@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
@@ -19,4 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
   Route::post('/subscription', [SubscriptionController::class, 'create']);
   Route::post('/subscription/renew', [SubscriptionController::class, 'renew']);
+
+  Route::post('/payments', [PaymentController::class, 'create']);
 });
+Route::post('/webhooks/payment', PaymentWebhookController::class);
