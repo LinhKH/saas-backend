@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Domains\Payment\Repositories\PaymentRepositoryInterface;
 use App\Domains\Subscription\Repositories\SubscriptionRepositoryInterface;
+use App\Domains\User\Repositories\UserAuthRepositoryInterface;
+use App\Infrastructure\Persistence\Eloquent\EloquentUserAuthRepository;
 use App\Infrastructure\Persistence\Repositories\PaymentRepository;
 use App\Infrastructure\Persistence\Repositories\SubscriptionRepository;
 use Illuminate\Support\ServiceProvider;
@@ -18,7 +20,11 @@ class AppServiceProvider extends ServiceProvider
     $bindings = [
       \App\Domains\User\Repositories\UserRepositoryInterface::class => \App\Infrastructure\Persistence\Repositories\UserRepository::class,
       SubscriptionRepositoryInterface::class => SubscriptionRepository::class,
-      PaymentRepositoryInterface::class => PaymentRepository::class
+      PaymentRepositoryInterface::class => PaymentRepository::class,
+      UserAuthRepositoryInterface::class => EloquentUserAuthRepository::class,
+      \App\Domains\User\Services\PasswordHasherInterface::class => \App\Infrastructure\Security\LaravelPasswordHasher::class,
+      //✅ Token generation abstraction
+      \App\Infrastructure\Authentication\TokenGeneratorInterface::class => \App\Infrastructure\Authentication\SanctumTokenGenerator::class,
     ];
     foreach ($bindings as $interface => $implementation) {
       $this->app->bind($interface, $implementation);

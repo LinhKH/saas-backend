@@ -2,27 +2,21 @@
 
 namespace App\Application\UseCases;
 
-use App\Domains\User\Services\AuthService;
+use App\Domains\User\Services\AuthDomainService;
 
 class LoginUserUseCase
 {
   public function __construct(
-    private AuthService $authService
+    private AuthDomainService $authService
   ) {}
 
-  public function execute(string $email, string $password): array
+  /**
+   * @param string $email
+   * @param string $password
+   * @return int $userId
+   */
+  public function execute(string $email, string $password): int
   {
-    $user = $this->authService->authenticate($email, $password);
-
-    $token = $user->createToken('api-token')->plainTextToken;
-
-    return [
-      'token' => $token,
-      'user' => [
-        'id' => $user->id,
-        'email' => $user->email,
-        'name' => $user->name,
-      ],
-    ];
+    return $this->authService->authenticate($email, $password);
   }
 }
